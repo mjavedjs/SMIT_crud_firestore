@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-import { getFirestore, getDocs, doc,addDoc  ,collection } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js"; 
+import { getFirestore, getDocs, doc,addDoc  ,collection,deleteDoc} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js"; 
 // Ensure you're using "firebase-firestore.js" for Firestore functions
 
 // Your web app's Firebase configuration
@@ -19,7 +19,6 @@ const db = getFirestore(app);
 // console.log(db);
 
 const form = document.getElementById('userForm');
-let globalArray =[]
 
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -56,23 +55,20 @@ form.addEventListener('submit', async (event) => {
 
       let html = ""
       let table = document.querySelector("table");
-      globalArray.length = 0;
-     docRef.forEach(element => {
-        //  console.log(element.data());
 
+     docRef.forEach(element => {
          const userData = element.data();
-         globalArray.push(userData);
+        const docid = element.id;
         //  console.log(globalArray);
+          html+= `
+          <tr>
+          <td>${userData.title}</td>
+          <td>${userData.description}</td>
+           <td> <button id="delbtn" onclick="deletMethod('${docid}')">Delete</button></td>
+           </tr>
+       `
      });
-     globalArray.forEach((res)=>{
-      html+= `
-      
-      <tr>
-      <td>${res.title}</td>
-      <td>${res.description}</td>
-       </tr>
-   `
-     })
+   
      table.innerHTML = html
       
     } catch (error) {
@@ -83,3 +79,9 @@ form.addEventListener('submit', async (event) => {
 }
 
 renderData()
+
+window.deletMethod = async function(docid){
+  const docRef = doc(db,'users',docid);
+  await deleteDoc(docRef)
+  renderData()
+}
