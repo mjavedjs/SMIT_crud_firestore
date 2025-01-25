@@ -127,6 +127,15 @@
         font-size: 14px;
       }
     }
+    .updatedbtn{
+       display:none;
+    }
+    .show{
+       display:block;
+    }
+    .hide{
+      display:none;
+    }
   </style>
 </head>
 <body>
@@ -137,7 +146,8 @@
     <label for="description">Description:</label>
     <textarea id="description" name="description" rows="5" placeholder="Enter description here" required></textarea>
     
-    <button type="submit">Submit</button>
+    <button type="submit" class="sumbit">Submit</button>
+    <button type="submit" class="updatedbtn">UpdateData</button>
   </form>
 
   <div class="container">
