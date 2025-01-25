@@ -19,6 +19,7 @@ const db = getFirestore(app);
 // console.log(db);
 
 const form = document.getElementById('userForm');
+let container = document.querySelector("#container")
 
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -43,6 +44,7 @@ form.addEventListener('submit', async (event) => {
         console.error("Error adding document: ", e);
       }
       renderData()
+      container.innerHTML = `<p>Data Added Suceessfully</p>`
        toEmptyinputFiled()
   });
 
@@ -83,12 +85,15 @@ form.addEventListener('submit', async (event) => {
      
 }
 
-renderData()
 // delet data 
 window.deletMethod = async function(docid){
+  container.innerHTML = ''
+
   const docRef = doc(db,'users',docid);
   await deleteDoc(docRef)
   renderData()
+  container.innerHTML = `<p>Data Delet Suceessfully.</p>`
+
 }
 
 // updated data from form 
@@ -102,8 +107,9 @@ window.UpdatedtMethod =  async function(id){
       document.querySelector("#title").value = currentUser.title;
       document.querySelector("#description").value =currentUser.description;
 
-      const sumbitbtn = document.querySelector('.sumbit');
-       const btn = document.querySelector(".updatedbtn");
+      let sumbitbtn = document.querySelector('.sumbit');
+       let btn = document.querySelector(".updatedbtn");
+
        btn.classList.add('show');
       sumbitbtn.classList.add('hide');
 
@@ -111,14 +117,18 @@ window.UpdatedtMethod =  async function(id){
           const newtilte = document.querySelector("#title").value;
           const newdescription = document.querySelector("#description").value;
 
-          if(!newtilte == null && !newdescription == null){
+          if(newtilte !== null && newdescription !== null){
               await updateDoc(doc(db,'users',id),{
                    title:newtilte,
                    description:newdescription
-              })
+              });
+              
               renderData()
-              btn.classList.remove('show');
+      container.innerHTML = ` <p>Data Updated  Suceessfully/<p>`
+
               sumbitbtn.classList.remove('hide');
+              btn.classList.remove('show');
+
           }
           
       })
@@ -127,3 +137,6 @@ window.UpdatedtMethod =  async function(id){
      console.log(error)
    }
 }
+
+
+renderData()
